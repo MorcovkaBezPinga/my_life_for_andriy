@@ -231,19 +231,32 @@ function frameBg(){
   bgT += 0.01;
   for(let p of bgParticles){
     if(p.type==='star'){
+      // star-shaped particle with twinkle
       p.y += p.vy * (0.3 + Math.sin(bgT + p.twinkle)*0.3);
-      p.twinkle += 0.04;
-      // wrap
+      p.twinkle += 0.06;
       if(p.y > bgCanvas.height + 10) p.y = -10;
       if(p.x > bgCanvas.width + 10) p.x = -10;
-      // draw soft star (glow)
-      const g = bgCtx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*6);
-      g.addColorStop(0, `rgba(255,255,255,${p.alpha})`);
-      g.addColorStop(1, 'rgba(155,93,229,0)');
-      bgCtx.fillStyle = g;
+      // draw a simple 5-point star
+      const sides = 5;
+      const outerR = p.r * 3.5;
+      const innerR = outerR * 0.45;
+      const rot = (bgT + p.twinkle) * 0.3;
+      bgCtx.save();
+      bgCtx.translate(p.x,p.y);
+      bgCtx.rotate(rot);
       bgCtx.beginPath();
-      bgCtx.arc(p.x,p.y,p.r*6,0,Math.PI*2);
+      for(let a=0;a<sides;a++){
+        const ang = (a*(Math.PI*2))/sides;
+        const x = Math.cos(ang) * outerR;
+        const y = Math.sin(ang) * outerR;
+        bgCtx.lineTo(x,y);
+        const ang2 = ang + Math.PI/sides;
+        bgCtx.lineTo(Math.cos(ang2)*innerR, Math.sin(ang2)*innerR);
+      }
+      bgCtx.closePath();
+      bgCtx.fillStyle = `rgba(255,255,255,${0.45 + Math.sin(p.twinkle)*0.25})`;
       bgCtx.fill();
+      bgCtx.restore();
     } else if(p.type==='snow'){
       p.y += p.vy;
       p.x += p.vx * (0.8 + Math.sin(bgT)*0.5);

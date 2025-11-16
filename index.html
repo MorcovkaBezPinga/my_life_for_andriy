@@ -10,6 +10,11 @@
     <div class="page-bg">
       <!-- background particles canvas (stars & snow) -->
       <canvas id="bgCanvas"></canvas>
+      <!-- neon corner decorations (purely visual) -->
+      <div class="neon-corner top-right" aria-hidden="true"></div>
+      <div class="neon-corner bottom-left" aria-hidden="true"></div>
+      <!-- floating slogan near stars -->
+      <div id="floatingWord" class="floating">Сім'я — це головне</div>
       <header class="hero">
         <h1 data-i18n="title">З Днем народження, Андрій! 🎉</h1>
         <p class="sub" data-i18n="subtitle">
@@ -31,8 +36,12 @@
         <div class="slide-wrap">
           <!-- Slides будуть додані скриптом -->
         </div>
-        <div class="caption" id="caption">Підпис фото</div>
-        <div class="photo-info" id="photoInfo">Інформація про фото</div>
+
+        <!-- Нижня панель с информацией — красиво оформлена под панелью -->
+        <div class="panel-info" aria-hidden="false">
+          <div class="caption" id="caption">Підпис фото</div>
+          <div class="photo-info" id="photoInfo">Інформація про фото</div>
+        </div>
       </main>
 
       <footer class="footer">

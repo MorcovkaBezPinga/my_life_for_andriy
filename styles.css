@@ -19,12 +19,21 @@ body {
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  background: radial-gradient(
-      circle at 10% 10%,
-      rgba(106, 17, 203, 0.14),
-      transparent 15%
+  /* darker brick-like wall with violet-blue gradient */
+  background-color: #0b0710;
+  background-image: linear-gradient(
+      160deg,
+      rgba(20, 6, 40, 0.86),
+      rgba(30, 0, 60, 0.88)
     ),
-    linear-gradient(135deg, var(--bg1), var(--bg2));
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.02) 0px,
+      rgba(255, 255, 255, 0.02) 2px,
+      transparent 2px,
+      transparent 28px
+    );
+  background-size: cover, 100% 60px; /* brick stripe height */
   overflow: hidden;
 }
 
@@ -40,6 +49,43 @@ body {
                ensure canvas sits above background but below panels */
 }
 
+/* floating word */
+#floatingWord {
+  position: fixed;
+  left: 6%;
+  top: 4%; /* ещё чуть выше, чтобы не перекрывало подписи */
+  z-index: 20; /* выше содержимого слайдов, но ниже языкового переключателя */
+  font-size: 1.05rem; /* smaller */
+  font-weight: 700;
+  color: rgba(255, 250, 255, 0.92);
+  text-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  opacity: 0.95;
+  transform-origin: center;
+  white-space: nowrap;
+  animation: moveAcross 18s linear infinite;
+}
+
+@keyframes moveAcross {
+  0% {
+    transform: translateX(-10vw) translateY(0) rotate(-0.6deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.95;
+  }
+  50% {
+    transform: translateX(28vw) translateY(-8px) rotate(0.6deg);
+  }
+  90% {
+    opacity: 0.95;
+  }
+  100% {
+    transform: translateX(-10vw) translateY(0) rotate(-0.6deg);
+    opacity: 0;
+  }
+}
+
 /* tint behind everything for stronger purple mood */
 .page-bg::before {
   content: "";
@@ -48,6 +94,7 @@ body {
   top: 0;
   right: 0;
   bottom: 0;
+  /* soft purple tint overlay to keep existing mood */
   background: linear-gradient(
     180deg,
     rgba(75, 0, 130, 0.06),
@@ -56,6 +103,73 @@ body {
   pointer-events: none;
   z-index: 0;
 }
+
+/* Neon corner frames (top-right and bottom-left). Each .neon-corner
+   element uses ::before (horizontal bar) and ::after (vertical bar)
+   with glow via box-shadow to mimic neon tubing. */
+.neon-corner {
+  position: fixed;
+  pointer-events: none;
+  z-index: 1; /* behind panels but above base background */
+}
+.neon-corner.top-right {
+  right: 28px;
+  top: 22px;
+  width: 300px; /* horizontal length */
+  height: 200px; /* vertical length */
+}
+.neon-corner.bottom-left {
+  left: 28px;
+  bottom: 28px;
+  width: 300px;
+  height: 200px;
+}
+.neon-corner::before,
+.neon-corner::after {
+  content: "";
+  position: absolute;
+  background: linear-gradient(90deg, #00e5ff, #ff00d6); /* cyan -> magenta */
+  filter: drop-shadow(0 0 12px rgba(0, 230, 255, 0.28))
+    drop-shadow(0 0 18px rgba(255, 0, 214, 0.18));
+  border-radius: 6px;
+}
+/* horizontal bar */
+.neon-corner::before {
+  height: 6px;
+  left: 0;
+  right: 0;
+  top: 0;
+  width: 100%;
+  box-shadow: 0 0 18px rgba(0, 230, 255, 0.24), 0 0 40px rgba(255, 0, 214, 0.12);
+}
+/* vertical bar */
+.neon-corner::after {
+  width: 6px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  box-shadow: 0 0 18px rgba(255, 0, 214, 0.22), 0 0 36px rgba(0, 230, 255, 0.12);
+}
+/* flip orientation for top-right: horizontal on top, vertical on right */
+.neon-corner.top-right::before {
+  left: auto;
+  right: 0;
+}
+.neon-corner.top-right::after {
+  left: auto;
+  right: 0;
+}
+/* flip orientation for bottom-left: horizontal on bottom, vertical on left */
+.neon-corner.bottom-left::before {
+  top: auto;
+  bottom: 0;
+}
+.neon-corner.bottom-left::after {
+  top: auto;
+  bottom: 0;
+}
+
 .hero {
   padding: 36px 20px 10px;
   text-align: center;
@@ -97,6 +211,7 @@ body {
 .stage {
   flex: 1;
   display: flex;
+  flex-direction: column; /* stack panel + info vertically */
   align-items: center;
   justify-content: center;
   position: relative;
@@ -107,15 +222,18 @@ body {
   max-width: 95%;
   height: 540px;
   max-height: 65vh;
+  /* panel slightly lighter than background with subtle pink tint */
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.04),
-    rgba(0, 0, 0, 0.12)
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 245, 247, 0.06)
   );
   border-radius: 14px;
   overflow: hidden;
   position: relative;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  /* soft shadow to lift slightly above background */
+  box-shadow: 0 16px 46px rgba(46, 18, 56, 0.12),
+    inset 0 2px 8px rgba(255, 255, 255, 0.03);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -131,31 +249,96 @@ body {
   position: absolute;
   inset: -10px; /* expand outside the panel */
   border-radius: 20px;
+  /* soft pink striped decorative frame (subtle) */
   background: repeating-conic-gradient(
     from 0deg,
-    rgba(255, 255, 255, 0.06) 0deg 12deg,
-    rgba(255, 255, 255, 0.02) 12deg 24deg
+    rgba(255, 182, 191, 0.14) 0deg 12deg,
+    rgba(255, 225, 231, 0.06) 12deg 24deg
   );
-  filter: blur(8px);
+  filter: blur(6px);
   opacity: 0.9;
   pointer-events: none;
   transform: rotate(0deg);
-  animation: spin 8s linear infinite;
+  animation: spin 12s linear infinite reverse;
   z-index: 1;
 }
 .slide-wrap::after {
   /* inner mask to keep center visible and create ring effect */
   content: "";
   position: absolute;
-  inset: 4px; /* thickness of the visible ring = 10px - 4px */
+  inset: 6px; /* thickness of inner mask */
   border-radius: 12px;
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0.03),
-    rgba(0, 0, 0, 0.06)
+    rgba(255, 245, 247, 0.04)
   );
   pointer-events: none;
   z-index: 3; /* above border but below slide content */
+}
+
+/* colored stripe under panel */
+.panel-stripe {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 10px;
+  bottom: 18%;
+  border-radius: 10px;
+  z-index: 2;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 122, 89, 0.95),
+    rgba(155, 93, 229, 0.95),
+    rgba(255, 200, 210, 0.95)
+  );
+  box-shadow: 0 6px 18px rgba(155, 93, 129, 0.12);
+  opacity: 0.95;
+}
+
+/* контейнер под панелью для подписей / информации */
+.panel-info {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 14px;
+  z-index: 6; /* над панелью */
+  pointer-events: auto;
+}
+
+.panel-info .caption,
+.panel-info .photo-info {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04),
+    rgba(255, 255, 255, 0.02)
+  );
+  padding: 10px 16px;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 0.95rem;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 8px 22px rgba(46, 18, 56, 0.12);
+  transition: transform 150ms ease, box-shadow 150ms ease, opacity 150ms ease;
+  opacity: 0.96;
+}
+
+.panel-info .photo-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  font-weight: 600;
+  background: rgba(106, 17, 203, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.panel-info .caption:hover,
+.panel-info .photo-info:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 36px rgba(46, 18, 56, 0.18);
 }
 
 /* ensure slide content stays above the decorative mask */
@@ -242,18 +425,7 @@ body {
   pointer-events: none;
 }
 .caption {
-  position: absolute;
-  left: 24px;
-  bottom: 26px;
-  background: linear-gradient(90deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2));
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-weight: 600;
-}
-.photo-info {
-  position: absolute;
-  right: 24px;
-  bottom: 26px;
+  /* panel-stripe removed as requested */
   background: var(--glass);
   padding: 10px 14px;
   border-radius: 10px;
@@ -331,5 +503,10 @@ body {
   }
   .slide-wrap {
     height: 320px;
+  }
+  .panel-info {
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
   }
 }
