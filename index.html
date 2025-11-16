@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Відео‑привітання для Андрія</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-bg">
+      <!-- background particles canvas (stars & snow) -->
+      <canvas id="bgCanvas"></canvas>
+      <header class="hero">
+        <h1 data-i18n="title">З Днем народження, Андрій! 🎉</h1>
+        <p class="sub" data-i18n="subtitle">
+          Нехай кожен кадр дарує тепло і посмішку — це маленьке відео з наших
+          фото.
+        </p>
+        <div class="controls">
+          <button id="playBtn" class="btn primary" data-i18n="play">
+            Запустити привітання
+          </button>
+          <button id="pauseBtn" class="btn" data-i18n="pause">Пауза</button>
+          <button id="fullscreenBtn" class="btn" data-i18n="fullscreen">
+            Повноекранно
+          </button>
+        </div>
+      </header>
+
+      <main class="stage" id="stage">
+        <div class="slide-wrap">
+          <!-- Slides будуть додані скриптом -->
+        </div>
+        <div class="caption" id="caption">Підпис фото</div>
+        <div class="photo-info" id="photoInfo">Інформація про фото</div>
+      </main>
+
+      <footer class="footer">
+        <small data-i18n="footer"
+          >Створено з любов'ю ❤️ — Привітання для Андрія</small
+        >
+      </footer>
+
+      <!-- святкові конфетті (canvas) -->
+      <canvas id="confetti"></canvas>
+      <!-- language switcher -->
+      <div class="lang-switch" aria-hidden="false">
+        <button id="langUa" class="lang-btn active" aria-label="Українська">
+          UA
+        </button>
+        <button id="langEn" class="lang-btn" aria-label="English">EN</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
